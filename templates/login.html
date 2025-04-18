@@ -1,0 +1,15 @@
+<h2> login </h2>
+<form method="post">
+    {% csrf_token %}
+
+    <label>Email:</label>
+    <input type="email" name="email" value = "{{ email }}" required><br>
+
+    <button type="submit" name="generate_otp">Genrate-otp</button>
+
+    <label>Enter OTP:</label>
+    <input type="text" name="otp">
+
+    <button type="submit">verify OTP</button>
+
+</form>
