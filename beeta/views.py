@@ -1,6 +1,4 @@
 from rest_framework.decorators import api_view
-# from rest_framework.views import APIView
-from django.contrib.auth.decorators import login_required
 from rest_framework.response import Response
 from beeta.serializers import EmployeeSerializer
 from .models import Employee , User , OTP
@@ -105,6 +103,6 @@ def loginview(request):
 
     return render(request, 'login.html')
 
-@login_required
+
 def homeview(request):
     return render(request, 'home.html')
