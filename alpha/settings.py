@@ -71,6 +71,14 @@ TEMPLATES = [
 WSGI_APPLICATION = 'alpha.wsgi.application'
 
 
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+    }
+}
+
+
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
@@ -145,3 +153,11 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'pranjalshuklaji2002@gmail.com'
 EMAIL_HOST_PASSWORD = 'ytvl pilo ukuq gdiz'
+
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+}
