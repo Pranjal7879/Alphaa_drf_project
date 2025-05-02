@@ -156,8 +156,31 @@ EMAIL_HOST_PASSWORD = 'ytvl pilo ukuq gdiz'
 
 
 
+
+# from datetime import timedelta
+
+
 REST_FRAMEWORK = {
+   
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+}
+
+
+# SIMPLE_JWT = {
+#     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
+#     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1)
+# }
+
+
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_THROTTLE_RATES': {
+        'login': '1/minute',  
+    }
 }

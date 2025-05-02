@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Employee ,User,OTP
+from .models import Employee ,User,OTP,Product 
 
 
 class EmployeeSerializer(serializers.ModelSerializer):
@@ -18,3 +18,7 @@ class OTPSerializer(serializers.ModelSerializer):
         model = OTP
         fields = '__all__'        
 
+class ProductSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        fields = '__all__'

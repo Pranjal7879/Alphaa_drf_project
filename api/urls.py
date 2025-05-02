@@ -1,4 +1,4 @@
-from beeta.views import office, employee_view ,Loginview,Signupview,Homeview,VerifyOtpview
+from beeta.views import office, employee_view ,Loginview,Signupview,Homeview,VerifyOtpview, ProductView , Productidview,ProductCategory
 from django.urls import path
 
 urlpatterns = [
@@ -8,7 +8,9 @@ urlpatterns = [
     path('login/', Loginview.as_view(), name='login'),
     path('verify-otp/', VerifyOtpview.as_view(), name='verify-otp'),
     path('home/', Homeview.as_view(), name='home'),
-
+    path('products/', ProductView.as_view(), name='product-list'),
+    path('products/<int:id>/', Productidview.as_view(), name='product-detail'),
+    path('products/<str:category>/', ProductCategory.as_view(), name='product-category'), 
 ]
 
 
