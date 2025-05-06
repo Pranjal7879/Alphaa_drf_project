@@ -11,10 +11,10 @@ from django.conf import settings
 from django.views.decorators.cache import cache_page
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.views.generic import TemplateView
-from django.http import Http404
 from .throttles import LoginThrottle
 from .pagination import CustomProductPagination
 from rest_framework.permissions import IsAuthenticated
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 
 @cache_page(60*1)
@@ -84,7 +84,8 @@ class LoginView(TemplateView):
     template_name = 'login.html'   
 
 class Loginview(APIView):
-    throttle_classes = [LoginThrottle]
+    # throttle_classes = [LoginThrottle]
+    permission_classes = []
     def post(self, request):
         email = request.data.get('email')
 
@@ -111,6 +112,7 @@ class Loginview(APIView):
     
 
 class VerifyOtpview(APIView):
+    permission_classes = []
     def post(self, request):
         email = request.data.get('email')
         otp_enterd = request.data.get('otp')
@@ -145,6 +147,7 @@ class VerifyOtpview(APIView):
 
 
 class ProductView(APIView):
+    authentication_classes = [JWTAuthentication]  
     permission_classes = [IsAuthenticated]
     def post(self, request):
      serializer = ProductSerializer(data=request.data)
@@ -164,16 +167,10 @@ class ProductView(APIView):
 
 
 
-# class Productidview(APIView):
-#     def get(self, pk):
-#         try:
-#             return Product.objects.get(pk=pk)
-#         except Product.DoesNotExist:
-#            raise Http404
-
-
 class Productidview(APIView):
     permission_classes = [IsAuthenticated]
+    authentication_classes = [JWTAuthentication]
+
     def get(self, request, id):
         try:
             product = Product.objects.get(id=id)
@@ -194,7 +191,17 @@ class Productidview(APIView):
          serializer.save()
          return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
-         return Response({'error': 'Invalid product'}, status=status.HTTP_400_BAD_REQUEST)  
+         return Response({'error': 'Invalid product'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+    def delete(self, request, id):
+        try:
+            product = Product.objects.get(id=id)
+        except :
+            pass
+
+        product.delete()
+        return Response({'message': 'Product deleted successfully'}, status=status.HTTP_204_NO_CONTENT)  
 
 
 
@@ -212,4 +219,4 @@ class ProductCategory(APIView):
 
 class Homeview(APIView):
     def get(self, request):
-        return Response({'message':'succesfully login'})            
+        return Response({'message':'succesfully login'})

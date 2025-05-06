@@ -1,5 +1,9 @@
 from beeta.views import office, employee_view ,Loginview,Signupview,Homeview,VerifyOtpview, ProductView , Productidview,ProductCategory
 from django.urls import path
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
 
 urlpatterns = [
     path('office/',office),
@@ -10,7 +14,8 @@ urlpatterns = [
     path('home/', Homeview.as_view(), name='home'),
     path('products/', ProductView.as_view(), name='product-list'),
     path('products/<int:id>/', Productidview.as_view(), name='product-detail'),
-    path('products/<str:category>/', ProductCategory.as_view(), name='product-category'), 
+    path('products/<str:category>/', ProductCategory.as_view(), name='product-category'),
+    path('api/products/<int:id>/', Productidview.as_view()) 
 ]
 
 
