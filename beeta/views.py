@@ -39,15 +39,6 @@ def office(request):
         return Response(xyz)
 
 
-# class officeView(APIView):
-#     def get(self, request):
-#         xyz = {
-#             'office': 'GoldenEagle',
-#             'services': ['web', 'android', 'AI', 'ROR'],
-#             'Service_Provider': "employee"
-#         }
-#         return Response(xyz)
-
 
 @api_view(['GET', 'POST'])
 def employee_view(request):
@@ -84,7 +75,7 @@ class LoginView(TemplateView):
     template_name = 'login.html'   
 
 class Loginview(APIView):
-    # throttle_classes = [LoginThrottle]
+    throttle_classes = [LoginThrottle]
     permission_classes = []
     def post(self, request):
         email = request.data.get('email')
@@ -161,9 +152,8 @@ class ProductView(APIView):
     def get(self, request):
         products = Product.objects.all()
         paginator = CustomProductPagination()
-        paginated_products = paginator.paginate_queryset(products, request)
-        serializer = ProductSerializer(paginated_products, many=True)
-        return paginator.get_paginated_response(serializer.data)
+        serializer = ProductSerializer(products, many=True)
+        return Response(serializer.data) 
 
 
 
