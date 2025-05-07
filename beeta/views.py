@@ -155,6 +155,7 @@ class ProductView(APIView):
         serializer = ProductSerializer(products, many=True)
         return Response(serializer.data) 
 
+        
 
 
 class Productidview(APIView):
