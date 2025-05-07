@@ -161,10 +161,8 @@ class ProductView(APIView):
     def get(self, request):
         products = Product.objects.all()
         paginator = CustomProductPagination()
-        paginated_products = paginator.paginate_queryset(products, request)
-        serializer = ProductSerializer(paginated_products, many=True)
-        return paginator.get_paginated_response(serializer.data)
-
+        serializer = ProductSerializer(products, many=True)
+        return Response(serializer.data) 
 
 
 class Productidview(APIView):
