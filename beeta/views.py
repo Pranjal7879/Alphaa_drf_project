@@ -11,7 +11,7 @@ from django.conf import settings
 from django.views.decorators.cache import cache_page
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.views.generic import TemplateView
-from .throttles import LoginThrottle
+# from .throttles import LoginThrottle
 from .pagination import CustomProductPagination
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
@@ -75,7 +75,7 @@ class LoginView(TemplateView):
     template_name = 'login.html'   
 
 class Loginview(APIView):
-    throttle_classes = [LoginThrottle]
+    # throttle_classes = [LoginThrottle]
     
     permission_classes = []
     def post(self, request):
