@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from beeta.serializers import EmployeeSerializer, UserSerializer , ProductSerializer
 from .models import Employee , User , OTP , Product
 from rest_framework import status
-from django.shortcuts import redirect
+# from django.shortcuts import redirect
 from django.utils.crypto import get_random_string
 from django.core.mail import send_mail
 from django.conf import settings
@@ -84,7 +84,7 @@ class LoginView(TemplateView):
     template_name = 'login.html'   
 
 class Loginview(APIView):
-    # throttle_classes = [LoginThrottle]
+    throttle_classes = [LoginThrottle]
     permission_classes = []
     def post(self, request):
         email = request.data.get('email')
@@ -94,8 +94,8 @@ class Loginview(APIView):
 
         try:
             user = User.objects.get(email=email)
-        except:
-               pass 
+        except User.DoesNotExist:
+               user = None
          
         otp = get_random_string(6, allowed_chars='0123456789')
         OTP.objects.create(user=user, otp_code=otp)
@@ -107,7 +107,7 @@ class Loginview(APIView):
             [email],
             fail_silently=False,
         )
-
+   
         return Response({'message': 'otp send'},status=status.HTTP_200_OK)  
     
 
@@ -122,8 +122,8 @@ class VerifyOtpview(APIView):
         
         try:
             user = User.objects.get(email=email)
-        except :
-            pass
+        except User.DoesNotExist:
+               user = None
 
         otp_obj = OTP.objects.filter(user=user, otp_code=otp_enterd).last()
 
@@ -160,22 +160,22 @@ class ProductView(APIView):
 
     def get(self, request):
         products = Product.objects.all()
-        paginator = CustomProductPagination()
-        paginated_products = paginator.paginate_queryset(products, request)
+        page = CustomProductPagination()
+        paginated_products = page.paginate_queryset(products, request)
         serializer = ProductSerializer(paginated_products, many=True)
-        return paginator.get_paginated_response(serializer.data)
+        return page.get_paginated_response(serializer.data)
  
-
-
+    
 class Productidview(APIView):
     permission_classes = [IsAuthenticated]
     authentication_classes = [JWTAuthentication]
 
+
     def get(self, request, id):
         try:
             product = Product.objects.get(id=id)
-        except:
-            pass
+        except Product.DoesNotExist:
+               product = None
 
         serializer = ProductSerializer(product)
         return Response(serializer.data) 
@@ -184,8 +184,8 @@ class Productidview(APIView):
     def put(self, request, id):
         try:
             product = Product.objects.get(id=id)
-        except:
-            pass
+        except Product.DoesNotExist:
+            product = None 
         serializer = ProductSerializer(product, data=request.data) 
         if serializer.is_valid():
          serializer.save()
@@ -197,8 +197,8 @@ class Productidview(APIView):
     def delete(self, request, id):
         try:
             product = Product.objects.get(id=id)
-        except :
-            pass
+        except Product.DoesNotExist :
+            product = None
 
         product.delete()
         return Response({'message': 'Product deleted successfully'}, status=status.HTTP_204_NO_CONTENT)  
@@ -206,11 +206,12 @@ class Productidview(APIView):
 
 
 class ProductCategory(APIView):
+    permission_classes = []
     def get(self, request, category):
         try:
             products = Product.objects.filter(category=category)
-        except:
-            pass
+        except Product.DoesNotExist :
+            products = None
 
         serializer = ProductSerializer(products, many=True)
         return Response(serializer.data)    

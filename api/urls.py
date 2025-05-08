@@ -1,9 +1,6 @@
 from beeta.views import office, employee_view ,Loginview,Signupview,Homeview,VerifyOtpview, ProductView , Productidview,ProductCategory
 from django.urls import path
-from rest_framework_simplejwt.views import (
-    TokenObtainPairView,
-    TokenRefreshView,
-)
+
 
 urlpatterns = [
     path('office/',office),
